@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.todo.springboot.model.TodoItem;
 import com.todo.springboot.service.ToDoService;
@@ -76,16 +74,19 @@ public class RestApiController {
 
 		if (currentTodoItem == null) {
 			 logger.error("Unable to update. ToDo Item with id {} not found.", id);
-			 return new ResponseEntity<Object>(new CustomErrorType("Unable to upate. To do Item with id" +
-					 id + " already exist."), HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<Object>(new CustomErrorType("Unable to upate. To do Item with id " +
+					 id + " does not exist."), HttpStatus.NOT_FOUND);
 		}
 
 		currentTodoItem.setTitle(todoItem.getTitle());
 		currentTodoItem.setDescription(todoItem.getDescription());
 		currentTodoItem.setCompleted(todoItem.isCompleted());
 
-		getService().updateTodoItem(currentTodoItem);
-		return new ResponseEntity<TodoItem>(currentTodoItem, HttpStatus.OK);
+		TodoItem updateTodoItem = getService().updateTodoItem(currentTodoItem);
+		if(updateTodoItem != null) {
+			return new ResponseEntity<TodoItem>(updateTodoItem, HttpStatus.OK);
+		}
+		return new ResponseEntity<TodoItem>(updateTodoItem, HttpStatus.NOT_FOUND);
 	}
 
 	// Delete a Todo

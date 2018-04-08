@@ -10,8 +10,6 @@ public interface ToDoService {
 	
 	TodoItem findByTitle(String title);
 	
-	TodoItem findByDescription(String desription);
-	
 	TodoItem saveTodoItem(TodoItem todoItem);
 	
 	TodoItem updateTodoItem(TodoItem todoItem);

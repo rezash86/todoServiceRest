@@ -3,6 +3,7 @@ package com.todo.springboot.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
@@ -40,16 +41,6 @@ public class ToDoServiceImpl implements ToDoService {
 	}
 
 	@Override
-	public TodoItem findByDescription(String desription) {
-		for (TodoItem todItem : todoItems) {
-			if (todItem.getDescription().equalsIgnoreCase(desription)) {
-				return todItem;
-			}
-		}
-		return null;
-	}
-
-	@Override
 	public TodoItem saveTodoItem(TodoItem todoItem) {
 		todoItem.setId(counter.incrementAndGet());
 		todoItems.add(todoItem);
@@ -58,9 +49,19 @@ public class ToDoServiceImpl implements ToDoService {
 
 	@Override
 	public TodoItem updateTodoItem(TodoItem todoItem) {
-		int index = todoItems.indexOf(todoItem);
-		todoItems.set(index, todoItem);
-		return todoItem;
+		TodoItem findById = findById(todoItem.getId());
+		if(findById !=null) {
+			Optional<TodoItem> findFirst = todoItems.stream().filter(t-> t.getId() == findById.getId()).findFirst();
+			if(findFirst.isPresent()) {
+				int index = todoItems.indexOf(findFirst.get());
+				todoItems.set(index, todoItem);
+				return todoItem;
+			}
+			else {
+				return null;
+			}
+		}
+		return null;
 	}
 
 	@Override

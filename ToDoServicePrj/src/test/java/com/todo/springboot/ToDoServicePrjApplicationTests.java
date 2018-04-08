@@ -1,6 +1,5 @@
 package com.todo.springboot;
 
-import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -8,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.todo.springboot.model.TodoItem;
 
- 
+//This test needs to be run after running the project with springboot
 public class ToDoServicePrjApplicationTests {
 
 	public static final String REST_SERVICE_URI = "http://localhost:8080/todoRest/api/";
@@ -43,8 +42,8 @@ public class ToDoServicePrjApplicationTests {
         System.out.println("Testing create ToDoItem API----------");
         RestTemplate restTemplate = new RestTemplate();
         TodoItem todoItem = new TodoItem(0, "wash car", "special service car wash", false);
-        URI uri = restTemplate.postForLocation(REST_SERVICE_URI+"/todo/", todoItem, TodoItem.class);
-        System.out.println("Location : "+uri.toASCIIString());
+        TodoItem todoItemInserted = restTemplate.postForObject(REST_SERVICE_URI+"/todo/", todoItem, TodoItem.class);
+        System.out.println(todoItemInserted);
     }
  
     /* PUT */
