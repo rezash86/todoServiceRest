@@ -35,7 +35,6 @@ public class ToDoServiceRestMicroTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		restServiceToTest = spy(new RestApiController());
-
 		doReturn(todoService).when(restServiceToTest).getService();
 	}
 
@@ -43,10 +42,8 @@ public class ToDoServiceRestMicroTest {
 	public void listAllTodos_positive() {
 		when(todoService.findAllTodoItems()).thenReturn(getDummyList());
 		ResponseEntity<List<TodoItem>> listAllToDos = restServiceToTest.listAllTodos();
-		
 		TodoItem restodoItem1 = listAllToDos.getBody().get(0);
 		assertEquals(restodoItem1, getDummyList().get(0));
-		
 		TodoItem restodoItem2 = listAllToDos.getBody().get(1);
 		assertEquals(restodoItem2, getDummyList().get(1));
 		
@@ -64,7 +61,6 @@ public class ToDoServiceRestMicroTest {
 	public void getTodoItem() {
 		when(todoService.findById(1)).thenReturn(getDummyList().get(1));
 		ResponseEntity<?> todoItem = restServiceToTest.getTodoItem(1);
-		
 		assertEquals(todoItem.getBody(), getDummyList().get(1));
 	}
 	
@@ -72,7 +68,6 @@ public class ToDoServiceRestMicroTest {
 	public void getTodoItem_NOTFOUND() {
 		when(todoService.findById(1)).thenReturn(null);
 		ResponseEntity<?> todoItem = restServiceToTest.getTodoItem(1);
-		
 		assert (todoItem.getStatusCode() == HttpStatus.NOT_FOUND);
 	}
 	
@@ -80,7 +75,6 @@ public class ToDoServiceRestMicroTest {
 	public void getTodoItemByTitle() {
 		when(todoService.findByTitle("test1")).thenReturn(getDummyList().get(1));
 		ResponseEntity<?> todoItem = restServiceToTest.getTodoItemByName("test1");
-		
 		assertEquals(todoItem.getBody(), getDummyList().get(1));
 	}
 	
@@ -88,7 +82,6 @@ public class ToDoServiceRestMicroTest {
 	public void getTodoItemByTitle_NOTFOUND() {
 		when(todoService.findByTitle("test1")).thenReturn(null);
 		ResponseEntity<?> todoItem = restServiceToTest.getTodoItemByName("test1");
-		
 		assert (todoItem.getStatusCode() == HttpStatus.NOT_FOUND);
 	}
 
