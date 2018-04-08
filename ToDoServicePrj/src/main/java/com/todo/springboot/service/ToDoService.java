@@ -12,9 +12,9 @@ public interface ToDoService {
 	
 	TodoItem findByDescription(String desription);
 	
-	void saveTodoItem(TodoItem todoItem);
+	TodoItem saveTodoItem(TodoItem todoItem);
 	
-	void updateTodoItem(TodoItem todoItem);
+	TodoItem updateTodoItem(TodoItem todoItem);
 	
 	void deleteTodoItemById (long id);
 

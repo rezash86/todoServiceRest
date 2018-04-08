@@ -1,4 +1,4 @@
-package com.todo;
+package com.todo.springboot;
 
 import java.net.URI;
 import java.util.LinkedHashMap;

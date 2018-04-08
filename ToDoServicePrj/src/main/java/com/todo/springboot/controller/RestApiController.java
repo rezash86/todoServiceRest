@@ -30,7 +30,7 @@ public class RestApiController {
 	// Retrive All Todos
 	@RequestMapping(value = "/todo/", method = RequestMethod.GET)
 	public ResponseEntity<List<TodoItem>> listAllTodos() {
-		List<TodoItem> todoItems = toDoService.findAllTodoItems();
+		List<TodoItem> todoItems = getService().findAllTodoItems();
 		if (todoItems.isEmpty()) {
 			return new ResponseEntity<List<TodoItem>>(HttpStatus.NOT_FOUND);
 		}
@@ -39,9 +39,9 @@ public class RestApiController {
 
 	// Retrieve Single Todo
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> getToDoItem(@PathVariable("id") long id) {
+	public ResponseEntity<?> getTodoItem(@PathVariable("id") long id) {
 		logger.info("Fetching TodoItem with id {}", id);
-		TodoItem toDoItem = toDoService.findById(id);
+		TodoItem toDoItem = getService().findById(id);
 		if (toDoItem == null) {
 			 logger.error("TodoItem with id {} not found.", id);
 			 return new ResponseEntity<Object>(new CustomErrorType("TodoItem with id " + id
@@ -52,29 +52,27 @@ public class RestApiController {
 
 	// Create a Todo
 	@RequestMapping(value = "/todo/", method = RequestMethod.POST)
-	public ResponseEntity<?> createToDo(@RequestBody TodoItem todoItem, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<?> createTodo(@RequestBody TodoItem todoItem) {
 		logger.info("Creating ToDoItem : {}", todoItem);
 
-		if (toDoService.isTodoItemExist(todoItem)) {
+		if (getService().isTodoItemExist(todoItem)) {
 			 logger.error("Unable to create. A ToDo Item with title {} already exist",
 			 todoItem.getTitle());
 			 return new ResponseEntity<Object>(new CustomErrorType("Unable to create. A ToDoItem with title: " +
 					 todoItem.getTitle() + " already exist."),HttpStatus.CONFLICT);
 		}
-		toDoService.saveTodoItem(todoItem);
+		TodoItem savedTodoItem = getService().saveTodoItem(todoItem);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/api/todo/{id}").buildAndExpand(todoItem.getId()).toUri());
-		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<TodoItem>(savedTodoItem, HttpStatus.CREATED);
 	}
+	
 
 	// Update a Todo
-
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateTodoItem(@PathVariable("id") long id, @RequestBody TodoItem todoItem) {
 		logger.info("Updating ToDoItem with id {}", id);
 
-		TodoItem currentTodoItem = toDoService.findById(id);
+		TodoItem currentTodoItem = getService().findById(id);
 
 		if (currentTodoItem == null) {
 			 logger.error("Unable to update. ToDo Item with id {} not found.", id);
@@ -86,22 +84,22 @@ public class RestApiController {
 		currentTodoItem.setDescription(todoItem.getDescription());
 		currentTodoItem.setCompleted(todoItem.isCompleted());
 
-		toDoService.updateTodoItem(currentTodoItem);
+		getService().updateTodoItem(currentTodoItem);
 		return new ResponseEntity<TodoItem>(currentTodoItem, HttpStatus.OK);
 	}
 
 	// Delete a Todo
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteTodoItems(@PathVariable("id") long id) {
+	public ResponseEntity<?> deleteTodoItem(@PathVariable("id") long id) {
 		logger.info("Fetching & Deleting ToDoItem with id {}", id);
 
-		TodoItem todoItem = toDoService.findById(id);
+		TodoItem todoItem = getService().findById(id);
 		if (todoItem == null) {
 			logger.error("Unable to delete. ToDoItem with id {} not found.", id);
 			return new ResponseEntity<Object>(new CustomErrorType("Unable to delete. ToDoItem with id " + id + " not found."),
 					HttpStatus.NOT_FOUND);
 		}
-		toDoService.deleteTodoItemById(id);
+		getService().deleteTodoItemById(id);
 		return new ResponseEntity<TodoItem>(HttpStatus.NO_CONTENT);
 	}
 
@@ -110,7 +108,12 @@ public class RestApiController {
 	public ResponseEntity<TodoItem> deleteAllTodoItems() {
 		logger.info("Deleting All ToDoItems");
 
-		toDoService.deleteAllTodoItems();
+		getService().deleteAllTodoItems();
 		return new ResponseEntity<TodoItem>(HttpStatus.NO_CONTENT);
+	}
+	
+	//for MicroTest usage
+	protected ToDoService getService() {
+		return toDoService;
 	}
 }

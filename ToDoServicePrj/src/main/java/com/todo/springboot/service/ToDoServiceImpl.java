@@ -50,15 +50,17 @@ public class ToDoServiceImpl implements ToDoService {
 	}
 
 	@Override
-	public void saveTodoItem(TodoItem todoItem) {
+	public TodoItem saveTodoItem(TodoItem todoItem) {
 		todoItem.setId(counter.incrementAndGet());
 		todoItems.add(todoItem);
+		return todoItem;
 	}
 
 	@Override
-	public void updateTodoItem(TodoItem todoItem) {
+	public TodoItem updateTodoItem(TodoItem todoItem) {
 		int index = todoItems.indexOf(todoItem);
 		todoItems.set(index, todoItem);
+		return todoItem;
 	}
 
 	@Override
