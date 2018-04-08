@@ -37,6 +37,14 @@ public class ToDoServicePrjApplicationTests {
         System.out.println(todoItem);
     }
      
+    /* GET by title */
+    private static void getToDoItemByTitle(){
+        System.out.println("Testing getTodoItem by title API----------");
+        RestTemplate restTemplate = new RestTemplate();
+        TodoItem todoItem = restTemplate.getForObject(REST_SERVICE_URI+"/title/todo/?title=meeting with Steve", TodoItem.class);
+        System.out.println(todoItem);
+    }
+    
     /* POST */
     private static void createTodoItem() {
         System.out.println("Testing create ToDoItem API----------");
@@ -72,6 +80,7 @@ public class ToDoServicePrjApplicationTests {
     public static void main(String args[]){
     	listAllToDoItems();
     	getToDoItem();
+    	getToDoItemByTitle();
     	createTodoItem();
         listAllToDoItems();
         updateTodoItem();
@@ -79,6 +88,7 @@ public class ToDoServicePrjApplicationTests {
         deleteTodoItem();
         listAllToDoItems();
         deleteAllTodoItems();
+        System.out.println("No other todos... please run again the springboot");
     }
 
 }

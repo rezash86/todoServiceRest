@@ -75,6 +75,22 @@ public class ToDoServiceRestMicroTest {
 		
 		assert (todoItem.getStatusCode() == HttpStatus.NOT_FOUND);
 	}
+	
+	@Test
+	public void getTodoItemByTitle() {
+		when(todoService.findByTitle("test1")).thenReturn(getDummyList().get(1));
+		ResponseEntity<?> todoItem = restServiceToTest.getTodoItemByName("test1");
+		
+		assertEquals(todoItem.getBody(), getDummyList().get(1));
+	}
+	
+	@Test
+	public void getTodoItemByTitle_NOTFOUND() {
+		when(todoService.findByTitle("test1")).thenReturn(null);
+		ResponseEntity<?> todoItem = restServiceToTest.getTodoItemByName("test1");
+		
+		assert (todoItem.getStatusCode() == HttpStatus.NOT_FOUND);
+	}
 
 	@Test
 	public void createTodo() {
@@ -93,6 +109,7 @@ public class ToDoServiceRestMicroTest {
 	@Test
 	public void updateTodoItem() {
 		when(todoService.findById(1)).thenReturn(getDummyTodoItem());
+		when(todoService.updateTodoItem(getUpdatedDummyTodoItem())).thenReturn(getUpdatedDummyTodoItem());
 		ResponseEntity<?> updatedTodoItem = restServiceToTest.updateTodoItem(1, getUpdatedDummyTodoItem());
 		assertEquals(updatedTodoItem.getBody(), getUpdatedDummyTodoItem());
 	}
