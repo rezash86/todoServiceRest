@@ -41,7 +41,7 @@ public class ToDoServicePrjApplicationTests {
     private static void getToDoItemByTitle(){
         System.out.println("Testing getTodoItem by title API----------");
         RestTemplate restTemplate = new RestTemplate();
-        TodoItem todoItem = restTemplate.getForObject(REST_SERVICE_URI+"/title/todo/?title=meeting with Steve", TodoItem.class);
+        TodoItem todoItem = restTemplate.getForObject(REST_SERVICE_URI+"/todo/title/?title=meeting with Steve", TodoItem.class);
         System.out.println(todoItem);
     }
     

@@ -51,7 +51,7 @@ public class RestApiController {
 	}
 
 	// Retrieve Single Todo
-	@RequestMapping(value = "/title/todo/", method = RequestMethod.GET)
+	@RequestMapping(value = "/todo/title/", method = RequestMethod.GET)
 	public ResponseEntity<?> getTodoItemByName(@QueryParam(value = "title") String title) {
 		logger.info("Fetching TodoItem with title {}", title);
 		TodoItem toDoItem = getService().findByTitle(title);
