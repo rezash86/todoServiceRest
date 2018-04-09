@@ -27,7 +27,10 @@ public class RestApiController {
 	@Autowired
 	ToDoService toDoService;
 
-	// Retrieve All Todos
+	/**
+	 * Retrieve All Todos
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/", method = RequestMethod.GET)
 	public ResponseEntity<List<TodoItem>> listAllTodos() {
 		List<TodoItem> todoItems = getService().findAllTodoItems();
@@ -37,7 +40,11 @@ public class RestApiController {
 		return new ResponseEntity<List<TodoItem>>(todoItems, HttpStatus.OK);
 	}
 
-	// Retrieve Single Todo
+	/**
+	 * Retrieve Single Todo by id
+	 * @param id
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getTodoItem(@PathVariable("id") long id) {
 		logger.info("Fetching TodoItem with id {}", id);
@@ -49,8 +56,12 @@ public class RestApiController {
 		}
 		return new ResponseEntity<TodoItem>(toDoItem, HttpStatus.OK);
 	}
-
-	// Retrieve Single Todo
+	
+	/**
+	 * Retrieve Single Todo by title
+	 * @param title
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/title/", method = RequestMethod.GET)
 	public ResponseEntity<?> getTodoItemByName(@QueryParam(value = "title") String title) {
 		logger.info("Fetching TodoItem with title {}", title);
@@ -64,6 +75,11 @@ public class RestApiController {
 	}
 
 	// Create a Todo
+	/**
+	 * Creates a Todo
+	 * @param todoItem
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/", method = RequestMethod.POST)
 	public ResponseEntity<?> createTodo(@RequestBody TodoItem todoItem) {
 		logger.info("Creating ToDoItem : {}", todoItem);
@@ -80,7 +96,12 @@ public class RestApiController {
 		return new ResponseEntity<TodoItem>(savedTodoItem, HttpStatus.CREATED);
 	}
 
-	// Update a Todo
+	/**
+	 * Updates a Todo
+	 * @param id
+	 * @param todoItem
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateTodoItem(@PathVariable("id") long id, @RequestBody TodoItem todoItem) {
 		logger.info("Updating ToDoItem with id {}", id);
@@ -105,7 +126,11 @@ public class RestApiController {
 		return new ResponseEntity<TodoItem>(updateTodoItem, HttpStatus.NOT_FOUND);
 	}
 
-	// Delete a Todo
+	/**
+	 * Delete a Todo
+	 * @param id
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteTodoItem(@PathVariable("id") long id) {
 		logger.info("Fetching & Deleting ToDoItem with id {}", id);
@@ -121,7 +146,10 @@ public class RestApiController {
 		return new ResponseEntity<TodoItem>(HttpStatus.NO_CONTENT);
 	}
 
-	// Delete All Todos
+	/**
+	 * Delete All Todos
+	 * @return ResponseEntity
+	 */
 	@RequestMapping(value = "/todo/", method = RequestMethod.DELETE)
 	public ResponseEntity<TodoItem> deleteAllTodoItems() {
 		logger.info("Deleting All ToDoItems");
